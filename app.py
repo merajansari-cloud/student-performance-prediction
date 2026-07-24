@@ -108,28 +108,103 @@ with st.form("student_form"):
     
     submit_button = st.form_submit_button("🚀 Predict Performance")
 
-# Output Section
+# Output Section - Premium Glassmorphism Result Card
 if submit_button:
     if not student_name or not roll_no:
         st.warning("⚠️ Please fill in all student details!")
     else:
-        # ML Logic Rule
+        # Prediction Logic
         prediction = "PASS" if (attendance >= 40 and study_hours >= 2) else "FAIL"
         
-        st.markdown("<hr style='border: 1px solid rgba(0, 255, 255, 0.2); margin: 25px 0;'>", unsafe_allow_html=True)
-        st.markdown("<h3 style='color: #00ffff; text-align: center;'>📊 Performance Result Card</h3>", unsafe_allow_html=True)
-        
-        res_col1, res_col2 = st.columns(2)
-        with res_col1:
-            st.markdown(f"**Name:** {student_name}")
-            st.markdown(f"**Roll No:** {roll_no}")
-        with res_col2:
-            st.markdown(f"**Semester:** {semester}")
-            st.markdown(f"**Academic Year:** {year}")
-            
-        st.write("")
-        
+        # Color & Icon Settings based on result
         if prediction == "PASS":
-            st.success(f"🎉 **PREDICTED STATUS: PASS**\n\nStudent demonstrates good engagement with {attendance}% attendance and {study_hours} hrs/day of study.")
+            badge_bg = "rgba(0, 255, 136, 0.15)"
+            badge_border = "#00ff88"
+            status_color = "#00ff88"
+            status_text = "PASSED / HIGH PERFORMANCE"
+            icon = "🎉"
+            shadow_color = "rgba(0, 255, 136, 0.3)"
+            message = f"Excellent consistency! With <b>{attendance:.1f}%</b> attendance and <b>{study_hours:.1f} hours/day</b> of dedicated study, performance is well above standard thresholds."
         else:
-            st.error(f"⚠️ **PREDICTED STATUS: FAIL / NEEDS IMPROVEMENT**\n\nLow attendance ({attendance}%) or insufficient study hours ({study_hours} hrs/day).")
+            badge_bg = "rgba(255, 75, 75, 0.15)"
+            badge_border = "#ff4b4b"
+            status_color = "#ff4b4b"
+            status_text = "NEEDS IMPROVEMENT / AT RISK"
+            icon = "⚠️"
+            shadow_color = "rgba(255, 75, 75, 0.3)"
+            message = f"Warning! Attendance (<b>{attendance:.1f}%</b>) or daily study hours (<b>{study_hours:.1f} hrs/day</b>) fall below required targets. Immediate focus needed."
+
+        st.markdown("<hr style='border: 1px solid rgba(0, 255, 255, 0.2); margin: 30px 0;'>", unsafe_allow_html=True)
+        
+        # Custom HTML Result Card
+        card_html = f"""
+        <div style="
+            background: rgba(18, 18, 30, 0.85);
+            border: 1px solid {badge_border};
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 0 30px {shadow_color};
+            backdrop-filter: blur(10px);
+            margin-top: 10px;
+        ">
+            <!-- Header Badge -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <span style="font-size: 1.2rem; font-weight: bold; color: #00ffff;">📊 OFFICIAL PERFORMANCE CARD</span>
+                <span style="
+                    background: {badge_bg};
+                    color: {status_color};
+                    border: 1px solid {badge_border};
+                    padding: 6px 16px;
+                    border-radius: 50px;
+                    font-size: 0.9rem;
+                    font-weight: 800;
+                    letter-spacing: 1px;
+                    box-shadow: 0 0 10px {shadow_color};
+                ">{icon} {status_text}</span>
+            </div>
+
+            <!-- Student Info Grid -->
+            <div style="
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+                background: rgba(255, 255, 255, 0.03);
+                padding: 15px;
+                border-radius: 12px;
+                margin-bottom: 20px;
+                border: 1px solid rgba(255, 255, 255, 0.05);
+            ">
+                <div><span style="color: #8888a0; font-size: 0.85rem;">STUDENT NAME</span><br><b style="color: #ffffff; font-size: 1.05rem;">{student_name.upper()}</b></div>
+                <div><span style="color: #8888a0; font-size: 0.85rem;">ROLL / ENROLLMENT NO</span><br><b style="color: #ffffff; font-size: 1.05rem;">{roll_no}</b></div>
+                <div><span style="color: #8888a0; font-size: 0.85rem;">SEMESTER</span><br><b style="color: #ffffff; font-size: 1.05rem;">Semester {semester}</b></div>
+                <div><span style="color: #8888a0; font-size: 0.85rem;">ACADEMIC YEAR</span><br><b style="color: #ffffff; font-size: 1.05rem;">{year}</b></div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; text-align: center; margin-bottom: 20px;">
+                <div style="background: rgba(0, 255, 255, 0.05); padding: 12px; border-radius: 10px; border: 1px solid rgba(0, 255, 255, 0.2);">
+                    <div style="color: #00ffff; font-size: 1.5rem; font-weight: bold;">{attendance:.1f}%</div>
+                    <div style="color: #aaa; font-size: 0.8rem;">ATTENDANCE RECORD</div>
+                </div>
+                <div style="background: rgba(138, 43, 226, 0.05); padding: 12px; border-radius: 10px; border: 1px solid rgba(138, 43, 226, 0.2);">
+                    <div style="color: #c77dff; font-size: 1.5rem; font-weight: bold;">{study_hours:.1f} Hours</div>
+                    <div style="color: #aaa; font-size: 0.8rem;">DAILY STUDY TIME</div>
+                </div>
+            </div>
+
+            <!-- Analysis Box -->
+            <div style="
+                background: {badge_bg};
+                border-left: 4px solid {badge_border};
+                padding: 12px 18px;
+                border-radius: 8px;
+                color: #e0e0e0;
+                font-size: 0.95rem;
+                line-height: 1.5;
+            ">
+                {message}
+            </div>
+        </div>
+        """
+        
+        st.markdown(card_html, unsafe_allow_html=True)
