@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="main-container">
+        
+        <div class="header">
+            <h1>🎓 Performance Prediction Result</h1>
+            <p>Analysis generated based on Machine Learning model</p>
+        </div>
+
+        <div class="card-wrapper">
+            <div class="glass-card result-card">
+                
+                <!-- Student Details Grid -->
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">Student Name</span>
+                        <span class="detail-value">{{ name }}</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="detail-label">Roll Number</span>
+                        <span class="detail-value">{{ roll }}</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="detail-label">Semester</span>
+                        <span class="detail-value">Semester {{ sem }}</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="detail-label">Academic Year</span>
+                        <span class="detail-value">{{ year }}</span>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Status Badge -->
+                <div class="prediction-box">
+                    <span class="prediction-title">Predicted Performance Status</span>
+                    <div class="status-badge {% if prediction == 'Pass' %}status-pass{% else %}status-fail{% endif %}">
+                        {% if prediction == 'Pass' %}🎉 PASS{% else %}⚠️ FAIL{% endif %}
+                    </div>
+                </div>
+
+                <!-- Back Action Button -->
+                <a href="/" class="glow-btn back-btn">🔄 Predict Again</a>
+
+            </div>
+        </div>
+
+        <div class="footer">
+            Developed with ❤️ by <span>Meraj Ansari</span>
+        </div>
+
+    </div>
+
+</body>
+</html>
